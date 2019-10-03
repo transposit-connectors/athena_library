@@ -1,6 +1,10 @@
 {
   "v2": {
     "transposit": {
+      "dependencies": [{
+        "name": "transposit/aws_athena:v2.*.*",
+        "alias": "aws_athena"
+      }],
       "operations": [{
         "id": "webhook",
         "function": {
