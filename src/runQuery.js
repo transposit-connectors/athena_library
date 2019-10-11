@@ -10,4 +10,5 @@
   })[0]["QueryExecutionId"];
   
   stash.put("query-id", executionId);
+  console.log("queryid: "+executionId);
 }

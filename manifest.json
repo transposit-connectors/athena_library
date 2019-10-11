@@ -6,11 +6,6 @@
         "alias": "aws_athena"
       }],
       "operations": [{
-        "id": "start_query_execution",
-        "tql": {
-          "tql": "SELECT * FROM aws_athena.start_query_execution\n  WHERE $body=(SELECT {\n    'ClientRequestToken' : '<string>',\n    'ResultConfiguration' : {\n      'EncryptionConfiguration' : {\n        'EncryptionOption' : 'SSE_S3 | SSE_KMS | CSE_KMS',\n        'KmsKey' : '<string>'\n      },\n      'OutputLocation' : '<required_string>'\n    },\n    'QueryExecutionContext' : {\n      'Database' : '<string>'\n    },\n    'QueryString' : '<required_string>'\n  })\n\n/*\n * For sample code and reference material, visit\n * https://www.transposit.com/docs/get-started/sql-quickstart\n */"
-        }
-      }, {
         "id": "makeId",
         "description": "Random id generator",
         "function": {
