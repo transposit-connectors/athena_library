@@ -88,6 +88,8 @@
       "javascriptAPIVersion": "3",
       "source": "src",
       "userSettingsDisplay": "GENERATED"
-    }
+    },
+    "description": "Useful functions for athena",
+    "displayName": "Athena Library"
   }
 }
