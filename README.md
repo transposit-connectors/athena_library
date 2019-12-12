@@ -1,3 +1,4 @@
+# Athena Library
 Easy athena use.
 
 Use `api.run("athena_library.runQuery",{query: "select...",resultlocation: 'writables3location'});` to run a query.
