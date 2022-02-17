@@ -1,90 +1,106 @@
 {
   "v2": {
     "transposit": {
-      "dependencies": [{
-        "name": "transposit/aws_athena:v2.*.*",
-        "alias": "aws_athena"
-      }],
-      "operations": [{
-        "id": "makeId",
-        "description": "Random id generator",
-        "function": {
-          "js": "makeId.js",
-          "lang": "js"
+      "dependencies": [
+        {
+          "name": "transposit/aws_athena:v2.*.*",
+          "alias": "aws_athena"
         }
-      }, {
-        "id": "runQuery",
-        "description": "Runs athena query, stashs result id",
-        "function": {
-          "parameters": [{
-            "name": "query",
-            "description": "query string",
-            "type": "STRING",
-            "required": true
-          }, {
-            "name": "resultlocation",
-            "description": "Usable s3 bucket for writing the results",
-            "type": "STRING"
-          }],
-          "js": "runQuery.js",
-          "lang": "js"
+      ],
+      "operations": [
+        {
+          "id": "makeId",
+          "description": "Random id generator",
+          "function": {
+            "js": "makeId.js",
+            "lang": "js"
+          }
+        },
+        {
+          "id": "runQuery",
+          "description": "Runs athena query, stashs result id",
+          "function": {
+            "parameters": [
+              {
+                "name": "query",
+                "description": "query string",
+                "type": "STRING",
+                "required": true
+              },
+              {
+                "name": "resultlocation",
+                "description": "Usable s3 bucket for writing the results",
+                "type": "STRING"
+              }
+            ],
+            "js": "runQuery.js",
+            "lang": "js"
+          }
+        },
+        {
+          "id": "get_query_execution",
+          "tql": {
+            "parameters": [
+              {
+                "name": "queryId",
+                "type": "STRING"
+              }
+            ],
+            "tql": "SELECT QueryExecution.Status.State FROM aws_athena.get_query_execution\n  WHERE $body=(SELECT {\n    'QueryExecutionId' : @queryId\n  })\n"
+          }
+        },
+        {
+          "id": "getQueryResults",
+          "function": {
+            "parameters": [
+              {
+                "name": "queryId",
+                "type": "STRING"
+              }
+            ],
+            "js": "getQueryResults.js",
+            "lang": "js"
+          }
         }
-      }, {
-        "id": "get_query_execution",
-        "tql": {
-          "parameters": [{
-            "name": "queryId",
-            "type": "STRING"
-          }],
-          "tql": "SELECT QueryExecution.Status.State FROM aws_athena.get_query_execution\n  WHERE $body=(SELECT {\n    'QueryExecutionId' : @queryId\n  })\n"
-        }
-      }, {
-        "id": "getQueryResults",
-        "function": {
-          "parameters": [{
-            "name": "queryId",
-            "type": "STRING"
-          }],
-          "js": "getQueryResults.js",
-          "lang": "js"
-        }
-      }],
-      "dataConnections": [{
-        "ref": "slack_identify.raw",
-        "overrides": {
-          "swagger": {
-            "oauthConfig": {
-              "scope": "identity.basic"
-            },
-            "executionLimits": {
+      ],
+      "dataConnections": [
+        {
+          "ref": "slack_identify.raw",
+          "overrides": {
+            "swagger": {
+              "oauthConfig": {
+                "scope": "identity.basic"
+              },
+              "executionLimits": {}
+            }
+          },
+          "title": "Slack",
+          "description": "Used to identify you on Slack"
+        },
+        {
+          "ref": "slack_bot.raw",
+          "overrides": {
+            "swagger": {
+              "oauthConfig": {
+                "scope": "chat:write:bot"
+              },
+              "executionLimits": {}
             }
           }
         },
-        "title": "Slack",
-        "description": "Used to identify you on Slack"
-      }, {
-        "ref": "slack_bot.raw",
-        "overrides": {
-          "swagger": {
-            "oauthConfig": {
-              "scope": "chat:write:bot"
-            },
-            "executionLimits": {
+        {
+          "ref": "slack.raw"
+        },
+        {
+          "ref": "aws_athena",
+          "overrides": {
+            "aws": {
+              "region": "us-west-2",
+              "executionLimits": {}
             }
           }
         }
-      }, {
-        "ref": "slack.raw"
-      }, {
-        "ref": "aws_athena",
-        "overrides": {
-          "aws": {
-            "region": "us-west-2",
-            "executionLimits": {
-            }
-          }
-        }
-      }],
+      ],
       "javascriptAPIVersion": "3",
       "source": "src",
       "userSettingsDisplay": "GENERATED"
